@@ -1,0 +1,7 @@
+Feature,Correlation,Absolute Importance,Valid Observations
+ndvi_change,-0.5321,0.5321,76
+precipitation_raw,-0.5248,0.5248,77
+slope_6m,-0.3791,0.3791,72
+ndvi_mean,-0.308,0.308,77
+anomaly_zscore,-0.1994,0.1994,77
+temperature_c,0.1776,0.1776,77

@@ -1,0 +1,34 @@
+# Raw satellite / environmental data
+data/
+*.tif
+*.tiff
+*.hdf
+*.h5
+*.grib
+*.grib2
+*.nc
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Models / large binaries
+*.pt
+*.pth
+*.pkl
+*.joblib
+
+# Logs
+logs/
+*.log
+
+# OS / IDE
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Keep trained SLOWWATCH model
+!models/
+!models/slowwatch_lstm.pt

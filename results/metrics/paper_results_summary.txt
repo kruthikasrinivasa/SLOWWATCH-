@@ -1,0 +1,40 @@
+SLOWWATCH - PAPER RESULTS SUMMARY
+======================================================================
+
+Study region: Kodagu, Karnataka, India
+Observation period: January 2018 - December 2025
+Monthly observations: 77
+Primary FIRMS reference events: 102
+Strict sensitivity events: 62
+
+MODEL COMPARISON
+        Model         Evaluation  Accuracy  Precision   Recall       F1  ROC-AUC   PR-AUC
+Random Forest Chronological Test  0.842105   0.866667 0.928571 0.896552 0.842857 0.929395
+         LSTM Chronological Test  0.684211   0.900000 0.642857 0.750000 0.800000 0.865960
+
+ABLATION RESULTS
+            Configuration  Features  Accuracy  Precision   Recall       F1  ROC-AUC   PR-AUC
+              A_NDVI_ONLY         2  0.578947   0.714286 0.714286 0.714286 0.542857 0.827098
+     B_NDVI_PLUS_TEMPORAL         8  0.684211   0.785714 0.785714 0.785714 0.614286 0.846421
+       C_PLUS_ENVIRONMENT        12  0.789474   0.857143 0.857143 0.857143 0.857143 0.946718
+D_FULL_SLOWWATCH_FEATURES        15  0.789474   0.857143 0.857143 0.857143 0.828571 0.933370
+
+UNCERTAINTY RESULTS
+            Measure    Value
+   Mean Uncertainty 0.545351
+ Median Uncertainty 0.608598
+Minimum Uncertainty 0.056648
+Maximum Uncertainty 0.829301
+    Mean Confidence 0.454649
+  Median Confidence 0.391402
+ Minimum Confidence 0.170699
+ Maximum Confidence 0.943352
+
+TOP XAI FEATURES
+          Feature  Correlation  Absolute Importance
+      ndvi_change     0.532149             0.532149
+precipitation_raw     0.524831             0.524831
+         slope_6m     0.379137             0.379137
+        ndvi_mean     0.307961             0.307961
+   anomaly_zscore     0.199377             0.199377
+    temperature_c     0.177552             0.177552

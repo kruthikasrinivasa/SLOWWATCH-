@@ -1,0 +1,3 @@
+Experiment,Ref Events,Detected,Recall,Mean Lead (mo),Median Lead (mo),Max Lead (mo),False Warn. Rate
+Wayanad_to_Nilgiris,42,28,0.6667,0.1071,0.0,3,0.0333
+Nilgiris_to_Wayanad,26,25,0.9615,0.48,0.0,3,0.383

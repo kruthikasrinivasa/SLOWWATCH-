@@ -1,0 +1,4 @@
+model,reference_events,detected_events,missed_events,event_recall,mean_lead_months,median_lead_months,maximum_lead_months,warning_periods,false_warning_periods,false_warning_rate
+LSTM,102,28,74,0.27450980392156865,1.9285714285714286,2.0,3.0,10,0,0.0
+Random Forest,102,28,74,0.27450980392156865,2.3214285714285716,3.0,3.0,15,0,0.0
+SLOWWATCH,102,10,92,0.09803921568627451,0.5,0.0,2.0,2,0,0.0

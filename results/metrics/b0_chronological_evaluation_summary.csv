@@ -1,0 +1,3 @@
+dataset,total_reference_events,detected_events,undetected_events,event_recall,mean_first_warning_lead_months,median_first_warning_lead_months,mean_last_warning_lead_months,median_last_warning_lead_months,total_b0_warning_months,associated_warning_months,false_warning_months,false_warning_rate,evaluation_window_months,evaluation_type
+primary_ge5,102,22,80,0.21568627450980393,3.046231035718552,2.4967148488830486,2.133854975510692,1.0183968462549278,15,8,7,0.4666666666666667,6,temporal_only
+sensitivity_ge10,62,10,52,0.16129032258064516,3.50197109067017,2.9894875164257555,2.3948751642575554,1.9710906701708277,15,7,8,0.5333333333333333,6,temporal_only

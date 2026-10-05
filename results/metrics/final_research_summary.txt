@@ -1,0 +1,35 @@
+SLOWWATCH - FINAL RESEARCH RESULTS SUMMARY
+======================================================================
+Study region: Kodagu, Karnataka, India
+Temporal period: 2018-01 to 2025-12
+Monthly observations: 77
+
+MODEL EVALUATION
+----------------------------------------------------------------------
+Random Forest: Accuracy=0.8421, Precision=0.8667, Recall=0.9286, F1=0.8966, ROC-AUC=0.8429, PR-AUC=0.9294
+LSTM: Accuracy=0.6842, Precision=0.9000, Recall=0.6429, F1=0.7500, ROC-AUC=0.8000, PR-AUC=0.8660
+
+EARLY-WARNING BASELINE
+----------------------------------------------------------------------
+primary_ge5: Recall=0.2156862745098039, Mean Lead=3.046231035718552
+sensitivity_ge10: Recall=0.1612903225806451, Mean Lead=3.50197109067017
+
+ABLATION
+----------------------------------------------------------------------
+A_NDVI_ONLY: F1=0.7143, ROC-AUC=0.5429, PR-AUC=0.8271
+B_NDVI_PLUS_TEMPORAL: F1=0.7857, ROC-AUC=0.6143, PR-AUC=0.8464
+C_PLUS_ENVIRONMENT: F1=0.8571, ROC-AUC=0.8571, PR-AUC=0.9467
+D_FULL_SLOWWATCH_FEATURES: F1=0.8571, ROC-AUC=0.8286, PR-AUC=0.9334
+
+UNCERTAINTY
+----------------------------------------------------------------------
+Mean uncertainty: 0.5454
+Median uncertainty: 0.6086
+Minimum uncertainty: 0.0566
+Maximum uncertainty: 0.8293
+Mean confidence: 0.4546
+Median confidence: 0.3914
+
+======================================================================
+Results generated from chronological evaluation outputs.
+Results are experiment-specific and should be interpreted with the corresponding sample sizes and evaluation protocol.

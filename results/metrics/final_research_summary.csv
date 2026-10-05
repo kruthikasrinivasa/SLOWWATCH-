@@ -1,0 +1,10 @@
+Metric,Value
+Study region,"Kodagu, Karnataka, India"
+Observation period,2018-01 to 2025-12
+Monthly observations,77
+Primary reference events,102
+Strict sensitivity events,62
+Train observations,48
+Validation observations,10
+Test observations,19
+B0 warning months,15

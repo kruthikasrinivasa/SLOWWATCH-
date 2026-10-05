@@ -1,0 +1,3 @@
+Train,Test,Accuracy,Precision,Recall,F1,ROC-AUC,PR-AUC
+Wayanad,Nilgiris,0.7419,0.9667,0.5577,0.7073,0.8372,0.8997
+Nilgiris,Wayanad,0.7955,0.6596,0.9394,0.775,0.9207,0.8947

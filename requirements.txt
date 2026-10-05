@@ -1,0 +1,14 @@
+numpy
+pandas
+xarray
+rasterio
+rioxarray
+geopandas
+matplotlib
+scipy
+scikit-learn
+pyyaml
+netCDF4
+cfgrib
+torch
+shap
