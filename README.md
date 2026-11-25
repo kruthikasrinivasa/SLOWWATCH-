@@ -2,406 +2,550 @@
 ### An Explainable and Uncertainty-Aware Temporal AI Framework for Early Detection of Gradual Vegetation Degradation from Multi-Temporal Satellite Observations
 
 <p align="center">
-  <strong>Temporal AI • Remote Sensing • Machine Learning • Environmental Intelligence • Explainable AI</strong>
+  <strong>Temporal AI | Remote Sensing | Machine Learning | Explainable AI | Environmental Monitoring</strong>
 </p>
 
 ---
 
-## 1. Overview
+## Overview
 
-**SLOWWATCH** is an AI-driven framework designed to identify early signs of gradual vegetation degradation by analyzing multi-temporal satellite observations and environmental conditions.
+**SLOWWATCH** is an explainable and uncertainty-aware temporal AI framework developed to identify potential early-warning signals of gradual vegetation degradation using multi-temporal satellite observations.
 
-Conventional vegetation monitoring approaches often rely on individual satellite observations or threshold-based vegetation indices. However, gradual vegetation degradation is a temporal process that may not be evident from a single observation.
+Vegetation degradation is often a gradual process that may be difficult to distinguish from seasonal variations, environmental fluctuations, and satellite observation noise. A temporary reduction in vegetation indices does not necessarily indicate persistent degradation.
 
-SLOWWATCH addresses this challenge by analyzing vegetation trajectories over time, identifying abnormal changes in vegetation patterns, incorporating environmental context, and estimating degradation risk with uncertainty awareness.
+SLOWWATCH addresses this challenge by analyzing vegetation trajectories over time, integrating environmental context, and evaluating predictive models alongside temporal risk, uncertainty, explainability, warning behaviour, and geographical transferability.
 
-The framework combines:
+The framework combines Harmonized Landsat and Sentinel-2 (HLS) observations, Fmask-based quality screening, NDVI-derived temporal features, ERA5-Land environmental variables, and machine learning models.
 
-- Multi-temporal satellite imagery and vegetation index analysis.
-- Quality-filtered NDVI observations.
-- Temporal feature engineering and anomaly detection.
-- Environmental context from temperature and precipitation.
-- Machine learning and sequence-based prediction models.
-- Temporal risk estimation and uncertainty analysis.
-- Explainable AI for interpreting model predictions.
-- Disturbance-event evaluation and cross-region validation.
+Rather than focusing only on classification accuracy, SLOWWATCH investigates how vegetation warnings behave over time, how uncertain the estimated risks are, which features are associated with risk changes, and how predictive performance transfers across geographical regions.
 
-The primary objective is to move beyond detecting existing vegetation changes towards identifying potential degradation signals early enough to support environmental monitoring and decision-making.
+## Research Objectives
 
-## 2. Problem Statement
+- Analyze long-term vegetation dynamics using multi-temporal satellite observations.
+- Identify potential early-warning signals from vegetation trajectory changes.
+- Distinguish seasonal vegetation variations from abnormal temporal behaviour.
+- Integrate temperature and precipitation as environmental context.
+- Compare Random Forest and LSTM predictive models.
+- Estimate continuous temporal vegetation risk and associated uncertainty.
+- Interpret feature-risk relationships through statistical analysis.
+- Evaluate feature contributions through ablation experiments.
+- Assess warning behaviour against independent disturbance references.
+- Investigate geographical transferability through bidirectional cross-region validation.
 
-Vegetation degradation is often a gradual process influenced by multiple environmental and temporal factors.
+## Research Gap and Novelty
 
-Traditional monitoring methods face several challenges:
+Existing vegetation-monitoring approaches frequently emphasize vegetation-change detection and predictive performance. However, identifying potential early-warning signals requires more than detecting changes or reporting classification metrics.
 
-- Individual satellite observations may fail to capture long-term degradation patterns.
-- Cloud cover and poor-quality satellite observations can affect vegetation measurements.
-- Seasonal variations can be mistaken for actual vegetation degradation.
-- Environmental conditions such as temperature and precipitation influence vegetation dynamics.
-- Prediction models may produce risk estimates without communicating their uncertainty.
-- Black-box predictions provide limited insight into the factors contributing to degradation warnings.
+There is a need to examine temporal warning behaviour, uncertainty, interpretability, and geographical transferability together.
 
-SLOWWATCH addresses these challenges through a temporal, multi-source and explainable AI approach.
+**SLOWWATCH addresses this gap through an integrated temporal early-warning framework.**
 
-## 3. Project Objectives
+Its research contribution lies in combining:
 
-1. Monitor vegetation dynamics using multi-temporal satellite observations.
-2. Identify abnormal NDVI trajectories and gradual vegetation decline.
-3. Extract temporal and environmental features to improve degradation prediction.
-4. Compare machine learning and sequence-based deep learning approaches.
-5. Estimate temporal vegetation degradation risk.
-6. Incorporate uncertainty analysis to communicate prediction reliability.
-7. Provide feature-level explanations for model predictions.
-8. Evaluate predictions against independently constructed disturbance-event references.
-9. Examine model performance across multiple geographical regions.
-10. Generate experimental future vegetation forecasts and potential degradation indicators.
+1. Temporal vegetation trajectory modelling.
+2. Environmental context integration.
+3. Continuous risk and uncertainty assessment.
+4. Feature-risk association analysis.
+5. Feature-group ablation experiments.
+6. Event-level warning and lead-time evaluation.
+7. Bidirectional geographical transfer validation.
 
-## 4. Study Regions and Dataset
+The emphasis is on evaluating the reliability and behaviour of vegetation-degradation warning signals rather than introducing an entirely new vegetation index or machine learning algorithm.
 
-The framework was developed and evaluated using three geographically distinct regions in South India.
+## Study Regions and Dataset
 
-| Study region | State | HLS granules | Monthly observations |
-|---|---|---:|---:|
-| Kodagu | Karnataka | 487 | 77 |
-| Wayanad | Kerala | 1,464 | 88 |
-| Nilgiris | Tamil Nadu | 1,267 | 93 |
+The experimental study covers three regions in South India over the period **2018–2025**.
 
-**Observation period:** 2018–2025
+| Region | State | HLS Granules | Valid Observations | Monthly Records |
+|---|---|---:|---:|---:|
+| Kodagu | Karnataka | 487 | — | 77 |
+| Wayanad | Kerala | 1,464 | 508 | 88 |
+| Nilgiris | Tamil Nadu | 1,267 | 584 | 93 |
+
+Kodagu serves as the primary model development and evaluation region. Wayanad and Nilgiris are used for geographical transferability experiments.
 
 ### Data Sources
 
-**1. Harmonized Landsat Sentinel-2 (HLS)**
+**1. Harmonized Landsat and Sentinel-2 (HLS)**
 
-HLS observations provide the satellite-derived vegetation information used for temporal monitoring.
+Satellite vegetation-index observations are used to construct multi-temporal vegetation records.
 
-- HLS-VI L30 observations.
-- Fmask v2 for quality filtering.
-- NDVI computation and monthly aggregation.
-- Multi-temporal vegetation trajectory construction.
+**2. Fmask v2.0**
 
-**2. ERA5-Land**
+Provides quality information for filtering observations affected by:
 
-ERA5-Land reanalysis data provides environmental context for understanding vegetation dynamics.
+- Clouds and adjacent clouds.
+- Cloud shadows.
+- Cirrus.
+- Snow and water.
+- Aerosols.
 
-Environmental variables include:
+**3. ERA5-Land**
 
-- Temperature.
-- Precipitation.
+Provides environmental context through:
 
-**3. NASA FIRMS**
+- 2-m air temperature.
+- Total precipitation.
 
-Fire Information for Resource Management System (FIRMS) data is used to construct reference disturbance events for event-level evaluation.
+**4. NASA FIRMS**
 
-These events provide an independent disturbance reference rather than fully field-validated vegetation degradation labels.
+Fire detection observations are used to construct independent disturbance reference events for event-level warning evaluation.
 
-## 5. System Architecture and Workflow
+FIRMS-derived events are treated as disturbance references, not field-verified vegetation degradation labels.
 
-The SLOWWATCH framework follows a multi-stage processing and prediction pipeline.
+## System Architecture
+
+The SLOWWATCH workflow consists of satellite data preprocessing, temporal feature engineering, environmental integration, predictive modelling, temporal risk estimation, uncertainty assessment, explainability, and evaluation.
 
 ```text
         HLS Satellite Observations
                    |
                    v
-        Fmask v2 Quality Filtering
+          Fmask v2.0 Quality
+               Screening
                    |
                    v
-          NDVI Computation
+          NDVI Extraction
                    |
                    v
-       Monthly Temporal Aggregation
+        Monthly NDVI Aggregation
                    |
                    v
-       Temporal Feature Extraction
+        Temporal Feature Engineering
                    |
           +--------+--------+
           |                 |
           v                 v
-    NDVI Trajectories   ERA5-Land Data
-          |             Temperature &
-          |             Precipitation
+   Vegetation Trends    ERA5-Land
+   and Anomalies        Temperature
+                        Precipitation
+          |                 |
           +--------+--------+
                    |
                    v
-       Multi-Source Feature Dataset
+          15-Feature Dataset
                    |
                    v
-          Model Development
-                   |
-            +------+------+
-            |             |
-            v             v
-       Random Forest     LSTM
-            |             |
-            +------+------+
+          Predictive Modelling
+             /         \
+            v           v
+      Random Forest    LSTM
+            \           /
+             \         /
                    |
                    v
-         Temporal Risk Estimation
+         SLOWWATCH Temporal Core
                    |
           +--------+--------+
           |                 |
           v                 v
-    Uncertainty Analysis  Explainable AI
+      Risk Estimation   Uncertainty
+                         and Confidence
           |                 |
           +--------+--------+
                    |
                    v
-          Early Warning Analysis
+          Feature-Risk Analysis
                    |
                    v
-       Event-Level Evaluation
+          Early-Warning Analysis
+                   |
+          +--------+--------+
+          |                 |
+          v                 v
+     Event-Level       Cross-Region
+     Evaluation        Validation
+          |                 |
+          +--------+--------+
                    |
                    v
-        Cross-Region Evaluation
-                   |
-                   v
-       Future NDVI Forecasting
-                   |
-                   v
-       Vegetation Monitoring Insights
+          Research Evaluation
 ```
 
-## 6. Methodology
+## Methodology
 
-### 6.1 Satellite Data Preprocessing
+### 1. HLS Preprocessing and Quality Control
 
-HLS satellite observations are processed using Fmask v2 quality information to filter unreliable observations.
+HLS vegetation-index observations are matched with their corresponding Fmask products using tile identifiers and acquisition details.
 
-NDVI is calculated to represent vegetation greenness:
+Fmask v2.0 is used to remove unreliable observations affected by clouds, shadows, snow, water, cirrus, and aerosols.
 
-NDVI = (NIR - Red) / (NIR + Red)
+The vegetation-index observations are rescaled using the product scaling factor of 0.0001 and restricted to the NDVI range of [-1, 1].
 
-The quality-filtered observations are aggregated into monthly NDVI values to construct consistent temporal vegetation records.
+Observations containing fewer than 100 good pixels are discarded.
 
-### 6.2 Temporal Feature Engineering
+For the Kodagu temporal pipeline, a 512 × 512-pixel central window is used.
 
-Instead of relying only on raw NDVI values, SLOWWATCH extracts temporal characteristics that capture changes in vegetation behaviour.
+The remaining quality-controlled observations are sorted chronologically and aggregated into monthly records.
 
-The framework uses 15 temporal and environmental features.
+### 2. Temporal Feature Engineering
 
-Important temporal features include:
+SLOWWATCH constructs 15 features representing vegetation conditions, temporal behaviour, and environmental context.
 
-- NDVI change: Measures changes between successive observations.
-- Rolling statistics: Capture short-term vegetation trends and fluctuations.
-- Six-observation slope: Represents the direction and rate of vegetation change over a temporal window.
-- Seasonal expected NDVI: Represents expected vegetation behaviour based on seasonal patterns.
-- Seasonal anomaly: Measures deviations from expected seasonal vegetation conditions.
-- Z-score: Represents the relative magnitude of vegetation anomalies.
+Important vegetation and temporal features include:
 
-These features help distinguish persistent vegetation decline from normal seasonal variations.
+- Monthly mean and median NDVI.
+- Month-to-month NDVI change.
+- Three-period moving average.
+- Three-period moving standard deviation.
+- Six-observation vegetation trajectory slope.
+- Seasonal expected NDVI.
+- Seasonal NDVI anomaly.
+- Anomaly Z-score.
 
-### 6.3 Environmental Context Integration
+Observation counts, valid-pixel counts, and quality flags are also retained where available.
 
-Temperature and precipitation observations from ERA5-Land are incorporated into the temporal feature dataset.
+The six-observation slope is calculated using the most recent available monthly records, which may not necessarily represent six consecutive calendar months.
 
-This provides additional environmental information for interpreting vegetation changes and understanding conditions associated with potential degradation.
+### 3. Environmental Context Integration
 
-### 6.4 Model Development
+ERA5-Land temperature and precipitation observations are aligned with monthly vegetation records.
 
-Two prediction approaches are investigated.
+The environmental preprocessing includes:
 
-**Random Forest**
+- Temperature conversion from Kelvin to Celsius.
+- Precipitation conversion from metres to millimetres.
+- Monthly environmental aggregation.
+- Temperature and precipitation change features.
 
-Random Forest is used as the primary machine learning model.
+Environmental variables provide contextual information for interpreting vegetation dynamics. Their inclusion does not establish that climatic conditions caused vegetation degradation.
 
-It learns relationships between temporal vegetation characteristics, environmental conditions and disturbance-related reference labels.
+### 4. Predictive Modelling
+
+Two predictive models are evaluated using chronological training, validation, and testing splits.
+
+**Random Forest (RF)**
+
+Random Forest is selected as the primary predictive model because it can capture nonlinear relationships within the structured temporal and environmental feature representation.
 
 **Long Short-Term Memory (LSTM)**
 
-LSTM is implemented as a comparative deep learning approach to capture sequential dependencies in vegetation observations.
+LSTM is implemented as a sequence-based deep learning comparison to investigate whether explicitly modelling temporal sequences improves prediction.
 
-A six-observation temporal sequence is used for sequence-based modelling.
+LSTM configuration:
 
-Both approaches are evaluated using chronological train, validation and test splits to preserve temporal ordering.
+- Sequence length: 6 observations.
+- Input features: 15.
+- Training sequences: 43.
+- Validation sequences: 10.
+- Testing sequences: 19.
+- Early stopping: Epoch 88.
+- Test period: January 2024 – December 2025.
 
-### 6.5 Temporal Risk Estimation
+The models are evaluated using accuracy, precision, recall, F1-score, ROC-AUC, and PR-AUC.
 
-The framework uses model predictions to estimate vegetation degradation risk over time.
+### 5. Baseline Warning Construction
 
-Temporal risk analysis helps identify potentially concerning vegetation patterns instead of treating every abnormal NDVI observation as an independent event.
+A trajectory-based warning indicator is constructed using seasonal NDVI anomaly and vegetation trajectory slope.
 
-The resulting warnings support early identification of regions showing possible vegetation decline.
+A candidate trajectory warning is generated when:
 
-### 6.6 Uncertainty Analysis
+- Seasonal NDVI anomaly is negative.
+- Six-observation trajectory slope is negative.
 
-SLOWWATCH incorporates uncertainty analysis to communicate the reliability of model predictions.
+A context-supported warning additionally considers precipitation below its historical median.
 
-The objective is to distinguish between predictions with relatively higher confidence and those that require additional observation or investigation.
+These indicators represent potential warning signals rather than confirmed vegetation degradation.
 
-Risk estimates and uncertainty information are considered together to support more responsible interpretation of early warnings.
+The Kodagu seasonal baseline uses the complete 2018–2025 observation period and is therefore not completely free from forecasting leakage.
 
-### 6.7 Explainable AI
+### 6. SLOWWATCH Temporal Risk Estimation
 
-Explainability is incorporated to understand which input features contribute to model predictions.
+The SLOWWATCH core calculates the following for each temporal observation:
 
-Feature-level explanations help interpret the influence of:
+- Continuous temporal-risk score.
+- Risk category.
+- Warning flag.
+- Uncertainty score.
+- Confidence score.
 
-- Vegetation changes.
-- Temporal trends.
-- Seasonal anomalies.
-- Environmental variables.
+Implemented risk categories:
 
-This makes the framework more interpretable than relying exclusively on prediction scores.
+- LOW
+- MINIMAL
+- MODERATE
 
-### 6.8 Ablation Analysis
+Risk represents the estimated level of concern associated with the observed vegetation trajectory. Uncertainty indicates how cautiously the risk estimate should be interpreted.
 
-Ablation experiments examine the contribution of different feature groups to predictive performance.
+### 7. Uncertainty and Confidence Assessment
 
-The analysis investigates whether combining temporal and environmental information improves predictions compared with using a more limited NDVI-based feature representation.
+Uncertainty and confidence are evaluated alongside temporal-risk estimates.
 
-### 6.9 Event-Level and Cross-Region Evaluation
+This allows the framework to communicate not only the estimated risk but also the degree of uncertainty associated with the observation.
 
-**Event-level evaluation:** Model warnings are examined against reference disturbance events constructed using FIRMS data.
+The analysis investigates how uncertainty varies across the monitoring period and how confidence complements the risk assessment.
 
-**Cross-region evaluation:** The framework is examined across Kodagu, Wayanad and Nilgiris to investigate its behaviour under different geographical and environmental conditions.
+### 8. Explainability and Feature-Risk Analysis
 
-These evaluations provide additional evidence beyond conventional classification metrics.
+SLOWWATCH uses Pearson correlation analysis to examine relationships between selected vegetation and environmental features and the temporal-risk score.
 
-## 7. Experimental Results
+The analysis considers:
 
-### Model Comparison
+- NDVI change.
+- Precipitation.
+- Vegetation trajectory slope.
+- Mean NDVI.
+- Anomaly Z-score.
+- Temperature.
 
-The following are the reported model evaluation results.
+Correlation magnitude and direction help interpret the association between individual features and temporal risk.
 
-| Evaluation metric | Random Forest | LSTM |
+**Important:** This is correlation-based feature-risk analysis, not SHAP-based attribution or causal explanation.
+
+### 9. Feature Ablation Study
+
+Ablation experiments evaluate the incremental contribution of vegetation, temporal, and environmental feature groups.
+
+Four configurations are compared:
+
+| Configuration | Feature Group |
+|---|---|
+| A | NDVI only |
+| B | NDVI + Temporal |
+| C | NDVI + Temporal + Environment |
+| D | Full 15 features |
+
+The purpose is to investigate how additional temporal and environmental information influences predictive performance.
+
+### 10. Event-Level Evaluation
+
+Event-level evaluation investigates warning generation in relation to FIRMS-derived disturbance reference events.
+
+The evaluation considers:
+
+- Reference-event detection.
+- Number of generated warnings.
+- Event recall.
+- Mean warning lead time.
+- Median warning lead time.
+- Maximum warning lead time.
+- False-warning rate.
+
+Warning lead time is calculated as:
+
+**Lead Time = Reference Event Date − Warning Date**
+
+A positive lead time indicates that the warning occurred before the corresponding reference event.
+
+These events are disturbance references and must not be interpreted as field-verified vegetation degradation ground truth.
+
+### 11. Bidirectional Cross-Region Validation
+
+Geographical transferability is evaluated between Wayanad and Nilgiris.
+
+Two experiments are conducted:
+
+- Train on Wayanad and test on Nilgiris.
+- Train on Nilgiris and test on Wayanad.
+
+This investigates how differences in geographical and environmental conditions influence predictive performance across regions.
+
+## Experimental Results
+
+### 1. Predictive Model Comparison
+
+The following table presents the chronological test results.
+
+| Metric | Random Forest | LSTM |
 |---|---:|---:|
-| Accuracy | 84.21% | 68.42% |
-| F1-score | 89.66% | 75.00% |
-| ROC-AUC | 84.29% | — |
-| PR-AUC | 92.94% | — |
+| Accuracy | **84.21%** | 68.42% |
+| Precision | 86.67% | **90.00%** |
+| Recall | **92.86%** | 64.29% |
+| F1-score | **89.66%** | 75.00% |
+| ROC-AUC | **84.29%** | 80.00% |
+| PR-AUC | **92.94%** | 86.60% |
 
-Random Forest demonstrated stronger performance than LSTM in the reported evaluation.
+Random Forest achieved stronger accuracy, recall, F1-score, ROC-AUC, and PR-AUC than LSTM in the chronological test experiment.
 
-The results indicate that the engineered temporal and environmental features provide useful predictive information without necessarily requiring a more complex sequential deep learning architecture.
+LSTM achieved higher precision, indicating stronger precision among its positive predictions in this particular evaluation.
 
-*Note: The LSTM ROC-AUC and PR-AUC values are not reported here because corresponding verified values are unavailable.*
+Random Forest was selected as the primary model based on its stronger overall performance, particularly in recall and F1-score.
 
-### Ablation Analysis
+### 2. Feature Ablation Results
 
-The reported ablation experiment showed an improvement in accuracy from 57.89% to 78.95% when the expanded feature configuration was used.
+| Configuration | Accuracy | Precision | Recall | F1-score | ROC-AUC | PR-AUC |
+|---|---:|---:|---:|---:|---:|---:|
+| A: NDVI only | 57.89% | 71.43% | 71.43% | 71.43% | 54.29% | 82.71% |
+| B: NDVI + Temporal | 68.42% | 78.57% | 78.57% | 78.57% | 61.43% | 84.64% |
+| C: NDVI + Temporal + Environment | 78.95% | 85.71% | 85.71% | 85.71% | 85.71% | 94.67% |
+| D: Full 15 Features | 78.95% | 85.71% | 85.71% | 85.71% | 82.86% | 93.34% |
 
-This supports the importance of incorporating additional temporal and environmental information rather than relying on a limited vegetation-index representation alone.
+**Key observation:**
 
-### Kodagu Risk Analysis
+Adding temporal and environmental information improved predictive performance compared with NDVI-only features.
 
-The reported Kodagu analysis included:
+However, the full 15-feature configuration did not produce additional F1-score improvement over the 12-feature configuration.
 
-- 77 monthly observations.
-- Mean estimated risk: 0.3584.
-- Two generated warnings.
-- Mean uncertainty: 0.5454.
-- Mean confidence: 0.4546.
+This indicates that adding more features does not necessarily result in better predictive performance.
 
-These values describe the reported experimental risk analysis and should not be interpreted as calibrated real-world degradation probabilities.
+### 3. Temporal Risk and Uncertainty Results
 
-## 8. Future Vegetation Forecasting
+For Kodagu, the SLOWWATCH core generated 77 temporal risk observations between January 2018 and December 2025.
 
-SLOWWATCH also includes an experimental future NDVI forecasting component to examine potential vegetation trajectories beyond the historical observation period.
+| Measure | Result |
+|---|---:|
+| Temporal observations | 77 |
+| LOW risk observations | 44 |
+| MINIMAL risk observations | 19 |
+| MODERATE risk observations | 14 |
+| Warning periods | 2 |
+| Mean temporal-risk score | 0.3584 |
+| Mean uncertainty | 0.5454 |
+| Mean confidence | 0.4546 |
 
-The forecasting outputs include:
+The uncertainty values ranged from 0.0566 to 0.8293.
 
-- Predicted NDVI values.
-- Approximate lower and upper uncertainty bounds.
-- Historical 12-month mean NDVI.
-- Difference between predicted NDVI and historical baseline.
-- Potential NDVI-decline indicators.
-- Forecast horizon and forecast origin.
+The results demonstrate that risk and uncertainty vary across the monitoring period rather than remaining consistently high.
 
-Experimental forecasts were generated for January–June 2026 across Kodagu, Wayanad and Nilgiris.
+### 4. Feature-Risk Association Results
 
-The forecast outputs help identify periods in which predicted vegetation conditions deviate from historical behaviour.
+| Feature | Correlation with Temporal Risk |
+|---|---:|
+| NDVI change | -0.5321 |
+| Precipitation | -0.5248 |
+| Slope | -0.3791 |
+| Mean NDVI | -0.3080 |
+| Anomaly Z-score | -0.1994 |
+| Temperature | +0.1776 |
 
-**Important:** These future NDVI forecasts and associated risk indicators are experimental monitoring signals. They are not independently validated future degradation events or calibrated probabilities of vegetation loss.
+NDVI change and precipitation showed the strongest absolute correlations with temporal risk in the reported analysis.
 
-## 9. Key Contributions
+These relationships are statistical associations and do not establish causality.
 
-The main contributions of SLOWWATCH are:
+### 5. Event-Level Warning Evaluation
 
-1. **Temporal vegetation monitoring:** Focuses on vegetation trajectories rather than isolated satellite observations.
+| Method | Events Detected | Mean Lead Time | Median Lead Time | Maximum Lead Time |
+|---|---:|---:|---:|---:|
+| SLOWWATCH | 10 | 0.50 months | 0 months | 2 months |
+| Random Forest | 28 | 2.32 months | 3 months | 3 months |
+| LSTM | 28 | 1.93 months | 2 months | 3 months |
 
-2. **Multi-source environmental analysis:** Combines satellite-derived vegetation information with temperature and precipitation context.
+The SLOWWATCH warning layer generated fewer events and shorter lead times than the underlying predictive models.
 
-3. **Temporal anomaly characterization:** Uses seasonal anomalies, rolling statistics and trend-based features to identify abnormal vegetation behaviour.
+This highlights the importance of evaluating the behaviour of the warning layer separately from model-level classification performance.
 
-4. **Comparative predictive modelling:** Evaluates Random Forest and LSTM approaches for vegetation degradation prediction.
+### 6. Cross-Region Generalization Results
 
-5. **Uncertainty-aware risk interpretation:** Incorporates uncertainty information alongside temporal risk estimates.
+| Train → Test | Accuracy | Precision | Recall | F1-score | ROC-AUC | PR-AUC |
+|---|---:|---:|---:|---:|---:|---:|
+| Wayanad → Nilgiris | 74.19% | 96.67% | 55.77% | 70.73% | 83.72% | 89.97% |
+| Nilgiris → Wayanad | 79.55% | 65.96% | 93.94% | 77.50% | 92.07% | 89.47% |
 
-6. **Explainable predictions:** Examines feature contributions to make model outputs more interpretable.
+The results show directional differences in geographical transferability.
 
-7. **Disturbance-based evaluation:** Uses FIRMS-derived reference events for additional event-level assessment.
+Wayanad-to-Nilgiris transfer achieved higher precision but lower recall, whereas Nilgiris-to-Wayanad transfer achieved higher recall but lower precision.
 
-8. **Cross-region investigation:** Examines the framework across three distinct South Indian geographical regions.
+This demonstrates that geographical differences can influence model behaviour and prediction errors.
 
-9. **Future vegetation forecasting:** Extends the monitoring workflow towards experimental future NDVI trajectory analysis.
+### 7. Cross-Region Event-Level Evaluation
 
-## 10. Technology Stack
+| Train → Test | Event Recall | False-Warning Rate |
+|---|---:|---:|
+| Wayanad → Nilgiris | 66.67% | 3.33% |
+| Nilgiris → Wayanad | 96.15% | 38.30% |
+
+These results further demonstrate directional differences in warning behaviour across geographical regions.
+
+## Key Research Contributions
+
+The primary contributions of SLOWWATCH include:
+
+1. **Temporal Early-Warning Framework:** Formulates gradual vegetation monitoring as a temporal early-warning problem rather than relying only on isolated vegetation observations.
+
+2. **Multi-Source Context Integration:** Combines satellite-derived NDVI trajectories with ERA5-Land temperature and precipitation information.
+
+3. **Uncertainty-Aware Risk Assessment:** Generates continuous temporal-risk estimates with separate uncertainty and confidence information.
+
+4. **Interpretable Feature-Risk Relationships:** Uses statistical association analysis to investigate the relationship between vegetation and environmental variables and temporal risk.
+
+5. **Feature Ablation:** Evaluates the contribution of NDVI, temporal, and environmental feature groups.
+
+6. **Event-Level Warning Evaluation:** Investigates disturbance-reference detection, warning generation, lead times, and false-warning behaviour.
+
+7. **Bidirectional Geographic Validation:** Examines model transferability between Wayanad and Nilgiris in both geographical directions.
+
+## Technology and Tools
 
 | Category | Technologies |
 |---|---|
-| Programming language | Python |
-| Machine Learning | Scikit-learn |
-| Deep Learning | PyTorch |
-| Satellite data | HLS-VI L30 |
-| Quality assessment | Fmask v2 |
+| Programming | Python |
+| Satellite observations | Harmonized Landsat and Sentinel-2 (HLS) |
+| Quality assessment | Fmask v2.0 |
+| Vegetation index | NDVI |
 | Environmental data | ERA5-Land |
 | Disturbance references | NASA FIRMS |
-| Data processing | Pandas, NumPy |
-| Visualization | Matplotlib |
-| Model evaluation | Scikit-learn metrics |
-| Development | Jupyter Notebook, VS Code, Git, GitHub |
+| Machine Learning | Random Forest |
+| Deep Learning | Long Short-Term Memory (LSTM) |
+| Statistical analysis | Pearson Correlation |
+| Model evaluation | Accuracy, Precision, Recall, F1, ROC-AUC, PR-AUC |
+| Data processing | Temporal aggregation and feature engineering |
 
-## 11. Limitations
+## Limitations
 
-The current implementation has the following limitations:
+The current research has several limitations:
 
-- FIRMS-derived disturbance events are not equivalent to field-validated vegetation degradation ground truth.
-- Missing satellite observations and unreadable quality-mask files can affect temporal data completeness.
-- The Kodagu spatial study window is limited.
-- Seasonal baselines are derived from the available 2018–2025 observation period and are not completely leakage-free.
-- Evaluation is limited to three geographical regions.
-- Future NDVI forecasts are experimental and require further independent validation.
-- The reported risk indicators should not be interpreted as calibrated probabilities of actual vegetation degradation.
+- FIRMS-derived events represent disturbance references and are not field-verified vegetation degradation labels.
+- Missing observations and unreadable Fmask files affect temporal continuity.
+- The Kodagu temporal analysis uses a 512 × 512-pixel central spatial window, limiting the spatial extent of the primary study.
+- The seasonal baseline uses the full 2018–2025 period and is not completely free from forecasting leakage.
+- The study considers only three geographical regions, limiting broader generalizability.
+- Pearson correlation identifies statistical associations rather than causal relationships.
+- The SLOWWATCH warning layer generated fewer events and shorter lead times than the predictive models alone.
 
-## 12. Future Scope
+## Future Scope
 
-Potential directions for further development include:
+Future research directions include:
 
+- Independent ecological validation using field-based degradation observations.
 - Extending the framework to additional geographical regions.
-- Incorporating longer historical satellite observation records.
-- Integrating additional environmental and land-cover variables.
-- Improving uncertainty calibration and probabilistic risk estimation.
-- Validating degradation warnings using field observations and independent ground-truth datasets.
-- Exploring advanced temporal architectures and forecasting approaches.
-- Developing operational monitoring dashboards with spatial risk visualization.
-- Improving early-warning evaluation through longer-term independent event observations.
+- Improving uncertainty estimation and interpretation.
+- Exploring advanced temporal modelling approaches.
+- Investigating geographically explicit early-warning systems.
+- Improving temporal data completeness and spatial coverage.
+- Evaluating long-term warning reliability across diverse environmental conditions.
 
-## 13. Research Significance
+## Conclusion
 
-SLOWWATCH investigates how temporal vegetation behaviour, environmental context and interpretable machine learning can be combined to support early identification of potential vegetation degradation.
+SLOWWATCH presents an explainable and uncertainty-aware temporal AI framework for investigating potential early-warning signals of gradual vegetation degradation using multi-temporal satellite observations.
 
-Rather than treating vegetation monitoring as a simple NDVI thresholding problem, the framework studies changes in vegetation trajectories over time and incorporates uncertainty and explainability into the prediction process.
+By combining quality-controlled HLS observations, temporal NDVI features, ERA5-Land environmental context, predictive modelling, temporal risk estimation, uncertainty assessment, feature-risk analysis, event-level evaluation, and cross-region validation, the framework extends vegetation monitoring beyond conventional classification-based assessment.
 
-The work contributes towards more informative and interpretable approaches for environmental monitoring using multi-temporal Earth observation data.
+The experiments demonstrate the value of temporal and environmental information over NDVI-only feature configurations and show that Random Forest achieved stronger overall chronological test performance than LSTM in the primary study.
 
-## 14. Repository
-
-**GitHub:** [SLOWWATCH – Repository](https://github.com/kruthikasrinivasa/SLOWWATCH-)
-
-**Author:** Kruthika S
-
-**Project Type:** B.Tech Major Capstone / Research Project
-
-**Domain:** Artificial Intelligence, Machine Learning, Remote Sensing and Environmental Monitoring
+Cross-region experiments also reveal directional differences in geographical transferability, highlighting the importance of evaluating the reliability and behaviour of early-warning systems across different environments.
 
 ---
 
-## 15. Disclaimer
+## Project Information
 
-SLOWWATCH is an academic research and experimental monitoring framework. Its predictions and warning indicators are intended to support further investigation and environmental assessment. They should not be treated as definitive evidence of vegetation degradation or as a substitute for field-based validation.
+**Project:** SLOWWATCH
+
+**Project Type:** B.Tech Major Capstone / Research Project
+
+**Research Domain:** Artificial Intelligence, Machine Learning, Remote Sensing and Environmental Monitoring
+
+**Study Period:** 2018–2025
+
+**Primary Study Region:** Kodagu, Karnataka, India
+
+**GitHub Repository:** https://github.com/kruthikasrinivasa/SLOWWATCH-
+
+## Authors
+
+- Kruthika S
+- Shalini S
+- Thungashree I L
+
+Department of Computer Science and Engineering (Data Science)  
+Dayananda Sagar University, Bengaluru, India.
+
+## Disclaimer
+
+SLOWWATCH is an academic research framework developed for experimental vegetation monitoring and early-warning analysis. Its risk estimates and disturbance-reference evaluations should not be interpreted as definitive evidence of vegetation degradation. Independent ecological and field-based validation is necessary before operational deployment.
 
 ---
 
 <p align="center">
   <strong>SLOWWATCH</strong><br>
-  Temporal Intelligence for Early Vegetation Degradation Monitoring
+  <i>Understanding Vegetation Change Through Temporal Intelligence</i>
 </p>
